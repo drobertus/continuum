@@ -1,0 +1,56 @@
+apply plugin: 'groovy'
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://m2.objectdb.com"
+    }
+}
+
+sourceSets {
+    integTest { sourceSet ->
+        ["java", "groovy", "scala", "resources"].each {
+            if (!sourceSet.hasProperty(it)) return
+            sourceSet."$it".srcDir file("src/integTest/${it}")
+        }
+    }
+}
+
+configurations {
+    compile.exclude module: 'groovy-all'
+    integTest
+}
+
+dependencies {
+
+    compile (
+        localGroovy(),
+        "com.objectdb:objectdb:2.6.0",
+    )
+
+    testCompile (
+
+        'org.spockframework:spock-core:0.7-groovy-2.0',
+        group: 'junit', name: 'junit', version: '4.11'
+    )
+    integTestCompile (
+        sourceSets.main.output,
+        sourceSets.test.output,
+        configurations.testCompile,
+
+    )
+    integTestRuntime configurations.testRuntime
+}
+
+
+// Define integration test task
+task integTest(type: Test) {
+    dependsOn test
+    testClassesDir = sourceSets.integTest.output.classesDir
+    classpath = sourceSets.integTest.runtimeClasspath
+}
+
+check.dependsOn integTest
