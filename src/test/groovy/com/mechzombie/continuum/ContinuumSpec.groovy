@@ -33,18 +33,23 @@ class ContinuumSpec extends Specification {
 
         setup:
             def testCont = new Continuum('company', "ABC Co.")
+
         when: "try to add a child type that has not been added as a supported type"
             def newChild = testCont.getOrCreateChildContinuum('employee', 'Caesar')
+
         then: " an exception should be thrown"
             Exception ex = thrown()
             assertEquals  ex.message , 'Type employee is not recognized.'
 
         when: " the child type is add to the supported set"
             def childType = testCont.getOrCreateSupportedType('employee')
+
         then: "supported types should include the new one"
             assertNotNull(childType)
+
         when: "a child type of the supported type is created"
             newChild = testCont.getOrCreateChildContinuum('employee', 'Caesar')
+
         then: "the child should be created"
             assertNotNull(newChild)
 
