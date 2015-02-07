@@ -16,7 +16,8 @@ class ContinuumType {
     // a 'phase' of a continuum is a
     private List<PhaseType> phases = []
     // a boundary is a transition into, out of, or between phases
-    def boundaries = []
+    Map<String, Boundary> boundaries = [:]
+
     Map<String, ContinuumType> childTypes = [:]
 
     Map<String, Continuum> instances = [:]
@@ -72,5 +73,40 @@ class ContinuumType {
 
     GlossaryEntry getGlossaryEntry(String entryName) {
         return glossary.entries[entryName]
+    }
+
+    Boundary createBoundary(String name, PhaseType preceedingPhase, PhaseType subsequentPhase) {
+
+        if(!name) {
+            throw new Exception ("A Boundary must have a name")
+        }
+
+        // check that there is at least one phasetype
+        if(!preceedingPhase && !subsequentPhase) {
+            throw new Exception ("Boundary ${name} requires a phasetype to follow to proceed (or both)")
+        }
+
+        def validProceeding = true
+        if(preceedingPhase){
+            validProceeding = this.phases.contains(preceedingPhase)
+        }
+
+        def validSuceeding = true
+        if(subsequentPhase){
+            validSuceeding = this.phases.contains(subsequentPhase)
+        }
+
+        if (!validProceeding || !validSuceeding) {
+            throw new Exception("The boundary must be coincident with phases that are part of this continuum type")
+        }
+
+
+        def glossEntry = glossary.getOrCreateEntry(name)
+        def bound = new Boundary(glossEntry, preceedingPhase, subsequentPhase)
+        preceedingPhase.exitBoundary = bound
+        subsequentPhase.entryBoundary = bound
+
+        this.boundaries.put(name, bound)
+        return bound
     }
 }

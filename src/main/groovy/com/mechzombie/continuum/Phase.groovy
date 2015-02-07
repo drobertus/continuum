@@ -7,8 +7,14 @@ class Phase {
 
     final PhaseType type
 
+    Boundary entryBoundary
+    Boundary exitBoundary
+
     Phase nextPhase
     Phase previousPhase
+
+    Date startDate
+    Date endDate
 
     Phase(PhaseType phaseType, Phase previousPhase = null, Phase nextPhase = null) {
         type = phaseType
@@ -16,4 +22,13 @@ class Phase {
         this.previousPhase = previousPhase
     }
 
+    void setStartDate(Date startDate) {
+        this.startDate = startDate
+        if(previousPhase) {
+            previousPhase.endDate = startDate
+        }
+        if (this.entryBoundary) {
+            entryBoundary.boundaryTask.scheduledDate = startDate
+        }
+    }
 }

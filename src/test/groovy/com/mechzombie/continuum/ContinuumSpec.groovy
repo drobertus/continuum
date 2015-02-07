@@ -27,6 +27,7 @@ class ContinuumSpec extends Specification {
             assertNotNull(type)
             assertNotNull entry
             assertEquals(entry.getName(), type.getNameAsString())
+
     }
 
     def "test for getOrCrateNewChildType"() {
@@ -53,7 +54,7 @@ class ContinuumSpec extends Specification {
         then: "the child should be created"
             assertNotNull(newChild)
 
-        and: "the two continuums should share the same type and glossary entry"
+        and: "the two continuum's should share the same type and glossary entry"
             assertEquals childType.getName(), newChild.getType().getName()
             assertEquals childType, newChild.getType()
             assertEquals 'Caesar', newChild.getName()

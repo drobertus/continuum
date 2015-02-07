@@ -26,6 +26,7 @@ class Continuum {
     Map<ContinuumType, Map<String, Continuum>> children = [:]
 
     List<Phase> phases = []
+    Map<String, Boundary> boundaries = [:]
 
     /**
      * This allows a continuum to be created in isolation
@@ -64,13 +65,35 @@ class Continuum {
         Phase prev
         type.phases.each { it ->
             def aPhase = new Phase(it, prev)
+
+            Boundary entryBound
             if (prev) {
                 prev.nextPhase = aPhase
+                entryBound = prev.exitBoundary
+
             }
+            else if(it.entryBoundary) {
+                entryBound = it.entryBoundary.getClone()
+            }
+            if (entryBound) {
+                aPhase.entryBoundary = entryBound
+                this.boundaries.put(entryBound.name.name, entryBound)
+            }
+
+            Boundary exitBound
+
+            if(it.exitBoundary) {
+                exitBound = it.exitBoundary.getClone()
+                aPhase.exitBoundary = exitBound
+                this.boundaries.put(exitBound.name.name, exitBound)
+            }
+
             this.phases << aPhase
 
             prev = aPhase
         }
+
+
 
         glossary.addEntry(type.name)
         this.type = type
@@ -119,11 +142,52 @@ class Continuum {
         return cont
     }
 
+    Phase getPhase(String phaseName) {
+        for(Phase p : phases) {
+            if (phaseName.equals(p.type.name)) {
+                return p
+            }
+        }
+        return null;
+    }
+
     GlossaryEntry getGlossaryEntry(String name) {
         return glossary.entries[name]
     }
 
     int getPhaseTypeCount() {
         return phases.size()
+    }
+
+    Map<String, Boundary> getBoundaries() {
+        boundaries
+    }
+
+    Boundary getBoundary(String boundaryName) {
+        return boundaries.get(boundaryName)
+    }
+
+    boolean setPhaseStartDate(String phaseName, Date date) {
+        def phase = this.getPhase(phaseName)
+        if (phase) {
+            phase.setStartDate(date)
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
+    boolean setPhaseEndDate(String phaseName, Date endDate) {
+
+    }
+
+    /**
+     * set the continuum in motion
+     * @param calendar
+     * @return
+     */
+    boolean begin(Calendar calendar) {
+
     }
 }

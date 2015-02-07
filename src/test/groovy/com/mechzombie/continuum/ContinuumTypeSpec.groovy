@@ -37,6 +37,11 @@ class ContinuumTypeSpec extends Specification {
             assertNotNull conType.getGlossaryEntry(plan.getName())
             assertNull conType.getGlossaryEntry('not a phase')
 
+        when: "create a boundary between two of the phases"
+            def bussPlan = conType.createBoundary("business-plan", plan, operations)
+        then: " the boundary should be bound to the phase types"
+            assertEquals bussPlan, plan.exitBoundary
+            assertEquals bussPlan, operations.entryBoundary
         when: "create a continuum from the type"
             Continuum companyX = conType.createContinuum('ABC Co.')
 

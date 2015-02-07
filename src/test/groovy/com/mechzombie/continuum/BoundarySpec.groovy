@@ -1,0 +1,119 @@
+package com.mechzombie.continuum
+
+import com.mechzombie.continuum.services.InMemContinuumMonitorService
+import com.mechzombie.continuum.util.CountDown
+import spock.lang.Shared
+import spock.lang.Specification
+
+import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertNull
+import static org.junit.Assert.assertTrue
+
+
+class BoundarySpec extends Specification {
+
+    @Shared
+    def cms = new InMemContinuumMonitorService()
+
+    def "test creation of phase types with entry and exit boundaries"()
+    {
+        setup: 'setup a continuum type with 3 phases'
+            def ct = new ContinuumType("Meeting")
+            def premeet = ct.appendPhaseType('pre-meeting')
+            def meet = ct.appendPhaseType('meeting')
+            def postMeet = ct.appendPhaseType('post-meeting')
+
+        when: "an entry boundary is set for the start"
+
+            def agenda = ct.createBoundary('agenda', premeet,meet)
+            def bound = ct.boundaries['agenda']
+        then:
+            assertNotNull agenda
+            assertEquals agenda, bound
+
+        and:
+            assertEquals premeet, agenda.precedingPhase
+            assertEquals meet, agenda.succeedingPhase
+
+            assertNull premeet.entryBoundary
+            assertNull meet.exitBoundary
+
+            assertEquals agenda, premeet.exitBoundary
+            assertEquals agenda, meet.entryBoundary
+    }
+
+    def "test that when a phase boundary is traversed (or Boundary crossed) that the Task for the boundary is called"(){
+        setup: "setup a continuum type with phase types and boundaries"
+            def meetingType = TestObjectFactory.getNewMeetingContinuumType()
+            def bounds = meetingType.boundaries
+
+        when: "construct a continuum from the continuum type"
+            def aMeeting = meetingType.createContinuum("Quarterly Sales Meeting")
+
+            def meetingName = aMeeting.getGlossaryEntry('meeting').name
+            def agendaName = aMeeting.getGlossaryEntry('agenda').name
+
+        then: "then the continuum should have appropriate matching boundaries and phases"
+            assertEquals bounds.size(), aMeeting.getBoundaries().size()
+            assertEquals aMeeting.phases[0].exitBoundary , aMeeting.phases[1].entryBoundary
+            assertEquals aMeeting.phases[1].exitBoundary , aMeeting.phases[2].entryBoundary
+
+            assertEquals aMeeting.boundaries.get(agendaName), aMeeting.phases[0].exitBoundary
+            assertEquals aMeeting.boundaries.get('meeting-notes'), aMeeting.phases[1].exitBoundary
+
+        when: "we set tasks on the boundaries"
+            def taskResults = []
+
+            aMeeting.getBoundary(agendaName).boundaryTask.toExecute = {testClosure(agendaName, taskResults)}
+
+            aMeeting.getBoundary('meeting-notes').boundaryTask.toExecute = {testClosure('meeting-notes', taskResults)}
+
+        and: "set the times for the continuum and its phase changes "
+            def cal = Calendar.getInstance(TimeZone.getDefault())
+            aMeeting.begin(cal)
+            //we will leave the end open ended
+            cms.monitorContinuum(aMeeting)
+        then: "the meeting continuum should be being processed and tied to the monitor"
+
+            def isMonitoring = cms.isMonitoring(aMeeting.name)
+            def startMonitorTimer = new CountDown(500)
+            while (!startMonitorTimer.hasExpired() && !isMonitoring) {
+                sleep(25)
+            }
+
+            assertTrue isMonitoring
+
+        when: " we set the time for the phases of the meeting"
+            cal.add(Calendar.SECOND, 3)
+            def meetingStartTime = cal.getTime()
+            cal.add(Calendar.SECOND, 3)
+            def meetingEndTime = cal.getTime()
+
+            aMeeting.setPhaseStartDate(meetingName, meetingStartTime)
+            aMeeting.setPhaseEndDate(meetingName, meetingEndTime)
+
+        then: "when the boundaries are passed (in time) the appropriate tasks are executed"
+            def countDown = new CountDown(7000)
+            while (!countDown.hasExpired() && taskResults.size() < 2) {
+                sleep(100)
+            }
+            assertEquals 2, taskResults.size()
+            def expected1 = taskResults[0].split('|')
+            def expected2 = taskResults[1].split('|')
+            assertEquals 'agenda', expected1[1]
+            assertEquals 'meeting-notes', expected2[1]
+
+        and: "there should be no tasks left to run when the continuum is completed"
+
+
+
+
+    }
+
+    def testClosure = { name, results ->
+        println "running a testClosure!"
+        results.add "executed|${name}|${System.currentTimeMillis()}"
+    }
+
+}
