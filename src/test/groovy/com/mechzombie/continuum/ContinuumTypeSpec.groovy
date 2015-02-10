@@ -1,8 +1,12 @@
 package com.mechzombie.continuum
 
+import com.google.common.eventbus.EventBus
+import com.mechzombie.continuum.monitor.TestMonitorContinuumSubscriber
+import spock.lang.Shared
 import spock.lang.Specification
 
 import static groovy.util.GroovyTestCase.assertEquals
+import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNull
 
@@ -12,10 +16,16 @@ import static org.junit.Assert.assertNull
  */
 class ContinuumTypeSpec extends Specification {
 
+    @Shared
+    def eventBus = new EventBus()
+
     def "create a continuum based on a type"() {
 
         setup: "create a type as a template"
             def conType = new ContinuumType('Company')
+            conType.setEventBus(eventBus)
+            def continuumSubscriber = new TestMonitorContinuumSubscriber();
+            eventBus.register(continuumSubscriber)
             // add a child type
             def salesTeam = conType.getOrCreateSupportedType('sales team')
 
@@ -46,7 +56,8 @@ class ContinuumTypeSpec extends Specification {
             Continuum companyX = conType.createContinuum('ABC Co.')
 
         then: " the created instance should inherit the glossary, child types, and phases"
-
+            assertEquals 1, continuumSubscriber.receivedEvents.size()
+            assertEquals companyX, continuumSubscriber.receivedEvents[0].continuum
             assertEquals conType.instances['ABC Co.'], companyX
             assertNotNull companyX.getGlossaryEntry('sales')
             assertNotNull companyX.getGlossaryEntry('Company')

@@ -10,8 +10,8 @@ class PhaseType {
     final GlossaryEntry phaseName
     final ContinuumType continuumType
 
-    Boundary entryBoundary
-    Boundary exitBoundary
+    BoundaryType entryBoundary
+    BoundaryType exitBoundary
 
     PhaseType nextPhase
     PhaseType previousPhase

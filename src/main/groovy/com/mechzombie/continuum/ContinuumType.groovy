@@ -1,7 +1,10 @@
 package com.mechzombie.continuum
 
+import com.google.common.eventbus.EventBus
 import com.mechzombie.continuum.glossary.Glossary
 import com.mechzombie.continuum.glossary.GlossaryEntry
+import com.mechzombie.continuum.monitoring.MonitorContinuumEvent
+import com.mechzombie.continuum.services.ContinuumMonitor
 
 /**
  * Created by David on 1/31/2015.
@@ -13,10 +16,12 @@ class ContinuumType {
     // there is a glossary for type specific terminology
     final Glossary glossary
 
+    private EventBus eventBus
+
     // a 'phase' of a continuum is a
     private List<PhaseType> phases = []
     // a boundary is a transition into, out of, or between phases
-    Map<String, Boundary> boundaries = [:]
+    Map<String, BoundaryType> boundaryTypes = [:]
 
     Map<String, ContinuumType> childTypes = [:]
 
@@ -66,6 +71,7 @@ class ContinuumType {
         if (!theCont) {
             theCont = new Continuum(this, instanceName)
             instances.put(instanceName, theCont)
+            eventBus.post(new MonitorContinuumEvent(theCont))
         }
 
         return theCont
@@ -75,7 +81,7 @@ class ContinuumType {
         return glossary.entries[entryName]
     }
 
-    Boundary createBoundary(String name, PhaseType preceedingPhase, PhaseType subsequentPhase) {
+    BoundaryType createBoundary(String name, PhaseType preceedingPhase, PhaseType subsequentPhase) {
 
         if(!name) {
             throw new Exception ("A Boundary must have a name")
@@ -102,11 +108,19 @@ class ContinuumType {
 
 
         def glossEntry = glossary.getOrCreateEntry(name)
-        def bound = new Boundary(glossEntry, preceedingPhase, subsequentPhase)
+        def bound = new BoundaryType(glossEntry, preceedingPhase, subsequentPhase)
         preceedingPhase.exitBoundary = bound
         subsequentPhase.entryBoundary = bound
 
-        this.boundaries.put(name, bound)
+        this.boundaryTypes.put(name, bound)
         return bound
+    }
+
+    void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus
+    }
+
+    EventBus getEventBus() {
+        return this.eventBus
     }
 }

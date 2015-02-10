@@ -26,13 +26,15 @@ dependencies {
 
     compile (
         localGroovy(),
+        'com.google.guava:guava:18.0'
+
     )
 
     testCompile (
 
         'org.spockframework:spock-core:0.7-groovy-2.0',
         group: 'junit', name: 'junit', version: '4.11',
-        'com.google.gwt:gwt-user:2.7.0'
+//        'com.google.gwt:gwt-user:2.7.0'
 
     )
 

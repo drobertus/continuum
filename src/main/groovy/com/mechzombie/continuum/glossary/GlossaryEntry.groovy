@@ -2,7 +2,7 @@ package com.mechzombie.continuum.glossary
 
 
 class GlossaryEntry {
-    def name
+    String name
     def description
     def cognates = []
 }

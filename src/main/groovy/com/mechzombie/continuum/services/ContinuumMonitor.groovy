@@ -1,10 +1,8 @@
 package com.mechzombie.continuum.services
 
-import com.mechzombie.continuum.Continuum
+import com.mechzombie.continuum.ContinuumType
+import com.mechzombie.continuum.Task
 
-/**
- * Created by David on 2/6/2015.
- */
 interface ContinuumMonitor {
 
     /**
@@ -36,7 +34,15 @@ interface ContinuumMonitor {
      * Add a continuum to the monitoring service
      * @param continuum
      */
-    void monitorContinuum(Continuum continuum)
+    //void monitorContinuum(Continuum continuum)
+
+    /**
+     * register a type of continuum to be monitored.
+     * individual continuum with use the event bus to
+     * handle their internal task registration
+     * @param type
+     */
+    void registerContinuumType(ContinuumType type)
 
     boolean isMonitoring(String continuumName)
 }

@@ -1,7 +1,9 @@
 package com.mechzombie.continuum
 
+import com.google.common.eventbus.EventBus
 import com.mechzombie.continuum.glossary.Glossary
 import com.mechzombie.continuum.glossary.GlossaryEntry
+import com.mechzombie.continuum.monitoring.TaskScheduleEvent
 
 class Continuum {
 
@@ -9,6 +11,8 @@ class Continuum {
     final GlossaryEntry name
     // the type of this continuum
     final ContinuumType type
+
+    final EventBus eventBus
 
     /**
      * A set of keywords relevant to a continuum.
@@ -50,6 +54,7 @@ class Continuum {
      */
     Continuum(ContinuumType type, String specificName) {
         glossary = new Glossary()
+        this.eventBus = type.getEventBus()
 
         //populate the glossary with all known types
         type.glossary.entries.each { key, val ->
@@ -89,7 +94,6 @@ class Continuum {
             }
 
             this.phases << aPhase
-
             prev = aPhase
         }
 
@@ -171,6 +175,13 @@ class Continuum {
         def phase = this.getPhase(phaseName)
         if (phase) {
             phase.setStartDate(date)
+            if (phase.previousPhase) {
+                phase.previousPhase.setEndDate(date)
+            }
+            if (phase.entryBoundary && phase.entryBoundary.boundaryTask) {
+                phase.entryBoundary.boundaryTask.scheduledDate = date
+                eventBus.post(new TaskScheduleEvent(phase.entryBoundary.boundaryTask));
+            }
             return true
         }
         else {
@@ -178,8 +189,22 @@ class Continuum {
         }
     }
 
-    boolean setPhaseEndDate(String phaseName, Date endDate) {
-
+    boolean setPhaseEndDate(String phaseName, Date date) {
+        def phase = this.getPhase(phaseName)
+        if (phase) {
+            phase.setEndDate(date)
+            if (phase.nextPhase) {
+                phase.nextPhase.setStartDate(date)
+            }
+            if (phase.exitBoundary && phase.exitBoundary.boundaryTask) {
+                phase.exitBoundary.boundaryTask.scheduledDate = date
+                eventBus.post(new TaskScheduleEvent(phase.exitBoundary.boundaryTask));
+            }
+            return true
+        }
+        else {
+            return false
+        }
     }
 
     /**
@@ -190,4 +215,12 @@ class Continuum {
     boolean begin(Calendar calendar) {
 
     }
+
+//    /**
+//     * The monitor allows tasks to be scheduled, etc
+//     * @param continuumMonitor
+//     */
+//    def setEventBus(EventBus bus) {
+//        this.eventBus = bus
+//    }
 }

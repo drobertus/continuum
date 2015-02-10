@@ -1,6 +1,13 @@
 package com.mechzombie.continuum.services
 
+import com.google.common.eventbus.EventBus
 import com.mechzombie.continuum.Continuum
+import com.mechzombie.continuum.ContinuumType
+import com.mechzombie.continuum.Task
+import com.mechzombie.continuum.monitoring.MonitorContinuumEvent
+import com.mechzombie.continuum.monitoring.MonitorContinuumSubscriber
+import com.mechzombie.continuum.monitoring.TaskScheduleEvent
+import com.mechzombie.continuum.monitoring.TaskSubscriber
 import groovy.util.logging.Log
 
 import java.util.concurrent.CopyOnWriteArrayList
@@ -15,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  */
 @Log
-class InMemContinuumMonitorService implements ContinuumMonitor {
+class InMemContinuumMonitorService implements ContinuumMonitor, TaskSubscriber, MonitorContinuumSubscriber {
 
     // this is essentially an ordered queue of tasks to perform
     // events can be inserted into it or removed from it
@@ -25,13 +32,27 @@ class InMemContinuumMonitorService implements ContinuumMonitor {
     private final def knownContinuum = new CopyOnWriteArrayList<Continuum>()
     private def monitoring = new AtomicBoolean(true)
 
+    EventBus eventBus// = new EventBus();
+    //TaskSubscriber taskSubscriber
+
     private final Thread monitorThread
 
-    InMemContinuumMonitorService() {
+    InMemContinuumMonitorService () {
+        eventBus = new EventBus()
+       // taskSubscriber = new TaskSubscriber()
+        eventBus.register(this)
         monitorThread = Thread.start monitor
     }
 
     boolean addTask(Task task) {
+
+        if (!task.scheduledDate) {
+            throw new Exception ('Task has no Scheduled Date')
+        }
+        if (!task.toExecute) {
+            //TODO - can we allow a task to be scheduled that has a null action?
+            throw new Exception ("Task has nothing to run ")
+        }
 
         if (listOfTasks.empty) {
             return listOfTasks.add(task)
@@ -81,10 +102,16 @@ class InMemContinuumMonitorService implements ContinuumMonitor {
             sleep(100)
         }
     }
+//
+//    @Override
+//    void monitorContinuum(Continuum continuum) {
+//        //continuum.setMonitor this
+//        newContinuum.add continuum
+//    }
 
     @Override
-    void monitorContinuum(Continuum continuum) {
-        newContinuum.add continuum
+    void registerContinuumType(ContinuumType type) {
+        type.setEventBus(this.eventBus)
     }
 
     @Override
@@ -111,8 +138,8 @@ class InMemContinuumMonitorService implements ContinuumMonitor {
             if (!newContinuum.empty) {
                 def c = newContinuum[0]
                 c.boundaries.values().each() { boundary ->
-                    if (boundary.boundaryTask) {
-                        this.addTask(boundary.boundaryTask)
+                    if (boundary.hasValidTask()) {
+                        this.addTask(boundary.getBoundaryTask())
                     }
                 }
                 knownContinuum.add(c)
@@ -120,5 +147,17 @@ class InMemContinuumMonitorService implements ContinuumMonitor {
             }
             sleep(50)
         }
+    }
+
+    @Override
+    void handleTaskScheduleEvent(TaskScheduleEvent event) {
+        log.info("Got TaskScheduleEvent ${event}")
+        this.addTask(event.task)
+    }
+
+    @Override
+    void subscribeToMonitorContinuumEvent(MonitorContinuumEvent event) {
+        log.info("Got MonitorContinuumEvent ${event}")
+        newContinuum << event.continuum
     }
 }
