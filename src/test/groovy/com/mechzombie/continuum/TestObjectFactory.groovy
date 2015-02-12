@@ -15,4 +15,12 @@ class TestObjectFactory {
         def meetingNotes = ct.createBoundary('meeting-notes', meet, postMeet)
         return ct
     }
+
+    static ContinuumType getNewTwoPhaseContinuumType() {
+        def ct = new ContinuumType("BeforeAfter")
+        def before = ct.appendPhaseType("before")
+        def after = ct.appendPhaseType("after")
+
+        return ct
+    }
 }

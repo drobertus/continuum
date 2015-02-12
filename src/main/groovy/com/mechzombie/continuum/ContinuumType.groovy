@@ -81,36 +81,44 @@ class ContinuumType {
         return glossary.entries[entryName]
     }
 
-    BoundaryType createBoundary(String name, PhaseType preceedingPhase, PhaseType subsequentPhase) {
+    BoundaryType createBoundary(String name, PhaseType phase, boolean atPhaseEntry) {
 
         if(!name) {
             throw new Exception ("A Boundary must have a name")
         }
 
+        int phasePosition = -1
+        def coincidentPhase
         // check that there is at least one phasetype
-        if(!preceedingPhase && !subsequentPhase) {
-            throw new Exception ("Boundary ${name} requires a phasetype to follow to proceed (or both)")
+        if(!phase ) {
+            throw new Exception ("Boundaries exist at start or end of a phase type - select a valid phase")
+        }else {
+            def pos = 0
+            for(PhaseType pt : phases) {
+                if (pt == phase) {
+                    phasePosition = pos
+                }
+                pos ++
+            }
+            if (phasePosition == -1) {
+                throw new Exception ("PhaseType ${phase.name} does not appear to exist in continuum ${this.name.name}" )
+            }
         }
-
-        def validProceeding = true
-        if(preceedingPhase){
-            validProceeding = this.phases.contains(preceedingPhase)
-        }
-
-        def validSuceeding = true
-        if(subsequentPhase){
-            validSuceeding = this.phases.contains(subsequentPhase)
-        }
-
-        if (!validProceeding || !validSuceeding) {
-            throw new Exception("The boundary must be coincident with phases that are part of this continuum type")
-        }
-
 
         def glossEntry = glossary.getOrCreateEntry(name)
-        def bound = new BoundaryType(glossEntry, preceedingPhase, subsequentPhase)
-        preceedingPhase.exitBoundary = bound
-        subsequentPhase.entryBoundary = bound
+        def bound
+        if (atPhaseEntry) {
+            coincidentPhase = phases[phasePosition - 1]
+            bound = new BoundaryType(glossEntry, coincidentPhase, phase)
+            phase.entryBoundary = bound
+            if(coincidentPhase) coincidentPhase.exitBoundary = bound
+        }
+        else {
+            coincidentPhase = phases[phasePosition + 1]
+            bound = new BoundaryType(glossEntry, phase, coincidentPhase)
+            phase.exitBoundary = bound
+            if(coincidentPhase) coincidentPhase.entryBoundary = bound
+        }
 
         this.boundaryTypes.put(name, bound)
         return bound

@@ -49,9 +49,11 @@ class ContinuumTypeSpec extends Specification {
 
         when: "create a boundary between two of the phases"
             def bussPlan = conType.createBoundary("business-plan", plan, operations)
+
         then: " the boundary should be bound to the phase types"
             assertEquals bussPlan, plan.exitBoundary
             assertEquals bussPlan, operations.entryBoundary
+
         when: "create a continuum from the type"
             Continuum companyX = conType.createContinuum('ABC Co.')
 
@@ -72,7 +74,7 @@ class ContinuumTypeSpec extends Specification {
                assertEquals conType.phases.get(it), companyX.phases.get(it).type
             }
 
-        when: " add a type to the type"
+        when: " add a child type to the continuum type"
             def employee = conType.getOrCreateSupportedType('employee')
 
         then: " it should not appear in the created continuum instance"
@@ -87,6 +89,30 @@ class ContinuumTypeSpec extends Specification {
             assertNotNull division
             assertNotNull companyX.getGlossaryEntry('division')
             assertNull conType.getGlossaryEntry('division')
+
+    }
+
+    def "test create boundary permutations"() {
+        setup:
+            def twoPhaseCT = TestObjectFactory.newTwoPhaseContinuumType
+            def beforePhase = twoPhaseCT.phases[0]
+            def afterPhase = twoPhaseCT.phases[1]
+
+        when:
+            def startBound = twoPhaseCT.createBoundary("start", beforePhase, true)
+
+        then:
+            assertEquals startBound, beforePhase.entryBoundary
+
+        when:
+            def endBound = twoPhaseCT.createBoundary("end", afterPhase, false)
+
+        then:
+            assertEquals endBound, afterPhase.exitBoundary
+
+
+
+
 
     }
 }
