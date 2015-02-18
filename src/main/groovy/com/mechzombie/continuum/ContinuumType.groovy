@@ -81,7 +81,7 @@ class ContinuumType {
         return glossary.entries[entryName]
     }
 
-    BoundaryType createBoundary(String name, PhaseType phase, boolean atPhaseEntry) {
+    BoundaryType createBoundary(String name, PhaseType phase, PhaseBoundary boundary) {
 
         if(!name) {
             throw new Exception ("A Boundary must have a name")
@@ -107,7 +107,10 @@ class ContinuumType {
 
         def glossEntry = glossary.getOrCreateEntry(name)
         def bound
-        if (atPhaseEntry) {
+
+        //TODO- ultimately we will need more logic to determine if the
+        //proceeding/succeeding phase is Coincident with the selected phase
+        if (PhaseBoundary.ENTRY.equals( boundary) ){
             coincidentPhase = phases[phasePosition - 1]
             bound = new BoundaryType(glossEntry, coincidentPhase, phase)
             phase.entryBoundary = bound

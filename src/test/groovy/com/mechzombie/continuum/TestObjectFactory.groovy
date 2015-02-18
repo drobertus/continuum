@@ -11,8 +11,8 @@ class TestObjectFactory {
         def meet = ct.appendPhaseType('meeting')
         def postMeet = ct.appendPhaseType('post-meeting')
 
-        def agenda = ct.createBoundary('agenda', premeet,meet)
-        def meetingNotes = ct.createBoundary('meeting-notes', meet, postMeet)
+        def agenda = ct.createBoundary('agenda', premeet, PhaseBoundary.EXIT)
+        def meetingNotes = ct.createBoundary('meeting-notes', meet, PhaseBoundary.EXIT)
         return ct
     }
 

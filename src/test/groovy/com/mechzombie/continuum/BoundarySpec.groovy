@@ -27,7 +27,7 @@ class BoundarySpec extends Specification {
 
         when: "an entry boundary is set for the start"
 
-            def agenda = ct.createBoundary('agenda', premeet,meet)
+            def agenda = ct.createBoundary('agenda', premeet, PhaseBoundary.EXIT)
             def boundType = ct.boundaryTypes['agenda']
         then:
             assertNotNull agenda
