@@ -1,2 +1,4 @@
-rootProject.name = 'continuum'
+//rootProject.name = 'continuum'
+
+include 'continuum-client', 'continuum-server'
 

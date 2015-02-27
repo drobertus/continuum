@@ -27,7 +27,7 @@ dependencies {
     compile (
         localGroovy(),
         'com.google.guava:guava:18.0',
-      //  'com.rabbitmq:amqp-client:3.3.5',
+        'com.rabbitmq:amqp-client:3.3.5',
 
     )
 
@@ -36,8 +36,8 @@ dependencies {
         'org.spockframework:spock-core:0.7-groovy-2.0',
         group: 'junit', name: 'junit', version: '4.11',
 //        'com.google.gwt:gwt-user:2.7.0'
-      //  'org.apache.qpid:qpid-broker:0.30',
-      //  'org.apache.qpid:qpid-broker-core:0.30',
+        'org.apache.qpid:qpid-broker:0.30',
+        'org.apache.qpid:qpid-broker-core:0.30',
 
     )
 

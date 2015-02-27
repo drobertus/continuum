@@ -1,0 +1,22 @@
+apply plugin: 'groovy'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compile.exclude module: 'groovy-all'
+    integTest
+}
+
+dependencies {
+    compile (
+        localGroovy(),
+        'com.rabbitmq:amqp-client:3.3.5',
+    )
+
+    testCompile(
+        'org.spockframework:spock-core:0.7-groovy-2.0',
+        group: 'junit', name: 'junit', version: '4.11'
+    )
+}
