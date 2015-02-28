@@ -43,15 +43,7 @@ class ContinuumMonitorServiceSpec extends Specification {
             cms.addTask(shouldBeLast)
             cms.addTask(shouldBeFirst)
 
-            def taskList = cms.listOfTasks
-        then: 'the tasks should be in the correct order'
-            assertEquals 3, taskList.size()
-            assertEquals shouldBeFirst, taskList[0]
-            assertEquals theMiddle, taskList[1]
-            assertEquals shouldBeLast, taskList[2]
-
-
-        when: 'the consumer is activated and we toss a new element in as the list is being consumed'
+        and: 'the consumer is activated and we toss a new element in as the list is being consumed'
 
             cms.resumeMonitoring()
             def timeout = new CountDown(7000)

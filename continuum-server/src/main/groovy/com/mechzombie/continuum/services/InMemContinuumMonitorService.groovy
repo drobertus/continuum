@@ -8,10 +8,10 @@ import com.mechzombie.continuum.monitoring.MonitorContinuumEvent
 import com.mechzombie.continuum.monitoring.MonitorContinuumSubscriber
 import com.mechzombie.continuum.monitoring.TaskScheduleEvent
 import com.mechzombie.continuum.monitoring.TaskSubscriber
-import groovy.transform.CompileStatic
 import groovy.util.logging.Log
 
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.ConcurrentSkipListMap
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * It monitors the continuums it is aware of,
  * waits for scheduled events such as start and end of
  * continuums and phases, looks for associated boundaries
- * and marshalls the necessary resources needed to
+ * and marshalls the necessary resources needed to process
  *
  */
 @Log
@@ -28,54 +28,26 @@ class InMemContinuumMonitorService implements ContinuumMonitor, TaskSubscriber, 
     // this is essentially an ordered queue of tasks to perform
     // events can be inserted into it or removed from it
     // each has a scheduled date/time.
-    private final def listOfTasks = new CopyOnWriteArrayList<Task>()
+    private final def listOfTasks = new ConcurrentSkipListMap<Date, Task>()
     private final def newContinuum = new CopyOnWriteArrayList<Continuum>()
     private final def knownContinuum = new CopyOnWriteArrayList<Continuum>()
     private def monitoring = new AtomicBoolean(true)
 
-    EventBus eventBus// = new EventBus();
-    //TaskSubscriber taskSubscriber
-
+    EventBus eventBus
     private final Thread monitorThread
 
     InMemContinuumMonitorService () {
         eventBus = new EventBus()
-       // taskSubscriber = new TaskSubscriber()
         eventBus.register(this)
         monitorThread = Thread.start monitor
     }
 
     boolean addTask(Task task) {
-
-        if (!task.scheduledDate) {
-            throw new Exception ('Task has no Scheduled Date')
-        }
-        if (!task.toExecute) {
-            //TODO - can we allow a task to be scheduled that has a null action?
-            throw new Exception ("Task has nothing to run ")
-        }
-
-        if (listOfTasks.empty) {
-            return listOfTasks.add(task)
-        }
-        int pos = 0;
-
-        def iter = listOfTasks.iterator()
-
-        while (iter.hasNext()) {
-            def aTask = iter.next()
-            if (aTask.scheduledDate.after(task.scheduledDate)) {
-                listOfTasks.add(pos, task)
-                return true
-            }
-            pos++
-        }
-        return listOfTasks.add(task)
-
+        return listOfTasks.put(task.scheduledDate, task)
     }
 
     boolean removeTask(Task task) {
-        listOfTasks.remove(task)
+        listOfTasks.remove(task.scheduledDate, task)
     }
 
     void shutdown() {
@@ -121,13 +93,16 @@ class InMemContinuumMonitorService implements ContinuumMonitor, TaskSubscriber, 
 
     private def monitor = {
         while (monitoring.get()) {
-            if (!listOfTasks.empty) {
-                def task = listOfTasks[0]
+
+            if (listOfTasks.size() > 0) {
+                def entry = listOfTasks.firstKey()
                 def now = new Date()
-                if (now.after(task.scheduledDate)) {
-                    log.info "Task runTime= ${task.scheduledDate.getTime()}, currTime = ${now.getTime()}, delta= ${now.getTime() - task.scheduledDate.getTime()}"
-                    listOfTasks.remove(task)
-                    Thread.start task.toExecute
+                if (now.after(entry)) {
+                    //TODO: behaviour with multiple values at the same date
+                    log.info "Task runTime= ${entry.getTime()}, currTime = ${now.getTime()}, delta= ${now.getTime() - entry.getTime()}"
+                    def toRun = listOfTasks.get(entry)
+                    listOfTasks.remove(entry, toRun)
+                    Thread.start toRun.toExecute
                 }
             }
             if (!newContinuum.empty) {
