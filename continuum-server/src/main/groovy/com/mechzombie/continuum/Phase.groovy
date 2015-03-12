@@ -18,7 +18,7 @@ class Phase {
         "Can not set a phase to end after the start of the next phase"
 
     final PhaseType type
-
+    String name
     BoundaryEvent entryBoundary
     BoundaryEvent exitBoundary
 
@@ -35,6 +35,7 @@ class Phase {
         type = phaseType
         this.nextPhase = nextPhase
         this.previousPhase = previousPhase
+        this.name = phaseType.name
     }
 
     void setStartDate(Date startDate, Phase coincidentPhase = this) {
@@ -117,4 +118,7 @@ class Phase {
     Date getStartDate() {
         return startDate
     }
+
+    String getName() {
+        return name    }
 }

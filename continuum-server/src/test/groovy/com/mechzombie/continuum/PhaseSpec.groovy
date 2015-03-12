@@ -31,7 +31,6 @@ class PhaseSpec extends Specification {
         cal = Calendar.instance
     }
 
-    //TODO: build the table type test
     def "test that phases respect continuum boundaries"() {
 
         when: "we give the continuum a start time"
@@ -47,6 +46,7 @@ class PhaseSpec extends Specification {
         when: " we should not be able to set the start time of either phase before the continuum start"
             cal.add(Calendar.DATE, -1)
             before.setStartDate(cal.time)
+
         then:
             Exception ex = thrown()
             assertEquals Phase.PHASE_START_PRECEEDS_CONTINUUM_START_EXCEPTION, ex.getMessage()
@@ -60,7 +60,6 @@ class PhaseSpec extends Specification {
             assertEquals before.startDate, cal.time
 
         when: "we give the continuum an end time"
-
             cal.add(Calendar.MONTH, 1)
             testC.setEndDate(cal.time)
             def continuumEndOrig = cal.time
@@ -176,14 +175,38 @@ class PhaseSpec extends Specification {
     //TODO: do we allow overlapping phases?  Or does what suggest that the continuums are
     //not defined with sufficient granularity?
 
-    def "test that phases respect their coincident boundary when moved"() {
+    def "test that phases respect new continuum boundaries"() {
 
+        when: "we give the 'before' phase a start time"
+            cal.add(Calendar.MONTH, -1)
+            def beforeStart = cal.time
+            before.setStartDate(cal.time)
 
-        when: "we give the 'before' phase an end time"
+        and: "the 'after' phase an end time"
+            cal.add(Calendar.MONTH, 2)
+            def afterEnd = cal.time
+            after.setEndDate(afterEnd)
 
-        then: "the 'after' phase start time should coincide with the 'before' phase end time"
+        then: "the continuum should have neither start or end date set"
+            assertNull testC.getEndDate()
+            assertNull testC.getStartDate()
 
+        when: "we set a start date to the continuum after the start date of the before phase"
+            cal.setTime(beforeStart)
+            cal.add(Calendar.DATE, 1)
+            testC.setStartDate(cal.getTime())
 
+        then: "we should get an exception that the continuum start date precedes the phase start"
+            Exception preceedingPhaseException = thrown()
+
+        when: " we set the continuum start to before the 'before' phase start "
+            cal.add(Calendar.DATE, -3)
+            testC.setStartDate(cal.getTime())
+        then: "the 'begin' phase should remain the same as was originally set"
+            assertEquals beforeStart, before.startDate
+
+        and: "the continuum start should be defined"
+            assertEquals cal.getTime(), testC.startDate
     }
 
 }

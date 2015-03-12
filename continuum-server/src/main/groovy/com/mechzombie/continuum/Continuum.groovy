@@ -152,7 +152,7 @@ class Continuum {
 
     Phase getPhase(String phaseName) {
         for(Phase p : phases) {
-            if (phaseName.equals(p.type.name)) {
+            if (phaseName.equals(p.name)) {
                 return p
             }
         }
@@ -227,11 +227,23 @@ class Continuum {
 //    def setEventBus(EventBus bus) {
 //        this.eventBus = bus
 //    }
+
     void setStartDate(Date date) {
-        this.startDate = date
-        if(this.phases[0] ){
-            phases[0].setStartDate(date)
+
+        if (phases.size() > 0) {
+            for(Phase phase : phases) {
+                if(phase.startDate && phase.startDate.before(date)) {
+                    throw new Exception ("Phase ${phase.getName()} has start date before ${date.toString()}")
+                }
+                if(phase.endDate && phase.endDate.before(date)) {
+                    throw new Exception ("Phase ${phase.getName()} has end date before ${date.toString()}")
+                }
+            }
+            if (!phases[0].startDate) {
+                phases[0].setStartDate(date)
+            }
         }
+        this.startDate = date
     }
 
     Date getStartDate() {

@@ -102,6 +102,9 @@ class InMemContinuumMonitorService implements ContinuumMonitor, TaskSubscriber, 
                     log.info "Task runTime= ${entry.getTime()}, currTime = ${now.getTime()}, delta= ${now.getTime() - entry.getTime()}"
                     def toRun = listOfTasks.get(entry)
                     listOfTasks.remove(entry, toRun)
+
+                    //def dehydrated = toRun.toExecute.dehydrate()
+
                     Thread.start toRun.toExecute
                 }
             }

@@ -2,3 +2,5 @@
 
 include 'continuum-client', 'continuum-server'
 
+include 'task-runner'
+
