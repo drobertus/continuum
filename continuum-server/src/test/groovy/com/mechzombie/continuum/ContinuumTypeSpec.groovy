@@ -53,11 +53,12 @@ class ContinuumTypeSpec extends Specification {
         then: " the boundary should be bound to the phase types"
             assertEquals bussPlan, plan.exitBoundary
             assertEquals bussPlan, operations.entryBoundary
-
+            assertEquals 6, conType.glossary.entries.size()
         when: "create a continuum from the type"
             Continuum companyX = conType.createContinuum('ABC Co.')
 
         then: " the created instance should inherit the glossary, child types, and phases"
+            assertEquals conType.glossary.entries.size() + 1, companyX.glossary.entries.size()
             assertEquals 1, continuumSubscriber.receivedEvents.size()
             assertEquals companyX, continuumSubscriber.receivedEvents[0].continuum
             assertEquals conType.instances['ABC Co.'], companyX

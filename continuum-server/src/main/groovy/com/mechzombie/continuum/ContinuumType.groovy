@@ -6,9 +6,6 @@ import com.mechzombie.continuum.glossary.GlossaryEntry
 import com.mechzombie.continuum.monitoring.MonitorContinuumEvent
 import groovy.transform.CompileStatic
 
-/**
- * Created by David on 1/31/2015.
- */
 @CompileStatic
 class ContinuumType {
     final GlossaryEntry name
@@ -43,8 +40,6 @@ class ContinuumType {
         if (!phases.empty) {
             priorPhase = phases.get(phases.size() -1)
         }
-
-
         def pt = new PhaseType(this, entry, priorPhase)
         if (priorPhase) priorPhase.nextPhase = pt
 
@@ -75,7 +70,6 @@ class ContinuumType {
             instances.put(instanceName, theCont)
             eventBus.post(new MonitorContinuumEvent(theCont))
         }
-
         return theCont
     }
 

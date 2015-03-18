@@ -44,9 +44,10 @@ class Continuum {
      * @param specificName
      */
     Continuum(String typeName, String specificName) {
-        glossary = new Glossary()
-        def entry = glossary.getOrCreateEntry(typeName)
+       // glossary = new Glossary()
+       // def entry = glossary.getOrCreateEntry(typeName)
         this.type = new ContinuumType(typeName)
+        this.glossary = type.glossary
         name = glossary.getOrCreateEntry(specificName)
     }
 
@@ -57,13 +58,8 @@ class Continuum {
      * @param specificName
      */
     Continuum(ContinuumType type, String specificName) {
-        glossary = new Glossary()
+        glossary = type.glossary.getClone()
         this.eventBus = type.getEventBus()
-
-        //populate the glossary with all known types
-        type.glossary.entries.each { key, val ->
-            glossary.addEntry(val)
-        }
 
         //copy over the child types
         type.childTypes.each {key, val ->

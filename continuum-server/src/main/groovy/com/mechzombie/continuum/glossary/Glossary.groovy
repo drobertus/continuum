@@ -2,9 +2,6 @@ package com.mechzombie.continuum.glossary
 
 import groovy.transform.CompileStatic
 
-/**
- * Created by David on 1/31/2015.
- */
 @CompileStatic
 class Glossary {
 
@@ -14,12 +11,20 @@ class Glossary {
         entries.put(glossaryEntry.name, glossaryEntry)
     }
 
-    GlossaryEntry getOrCreateEntry(String name){
+    GlossaryEntry getOrCreateEntry(String name, String description = null, List<String> cognates = []){
         def entry = entries.get(name)
         if (!entry) {
-            entry = new GlossaryEntry(name: name)
+            entry = new GlossaryEntry(name, description, cognates)
             addEntry(entry)
         }
         return entry
+    }
+
+    Glossary getClone() {
+        def clone = new Glossary()
+        for(GlossaryEntry ge: entries.values()) {
+           clone.addEntry(ge.getClone())
+        }
+        return clone
     }
 }
