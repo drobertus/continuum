@@ -1,6 +1,6 @@
 package com.mechzombie.continuum.services
 
-import com.mechzombie.continuum.Task
+import com.mechzombie.continuum.tasks.Task
 import com.mechzombie.continuum.util.CountDown
 import groovy.util.logging.Log
 import spock.lang.Specification

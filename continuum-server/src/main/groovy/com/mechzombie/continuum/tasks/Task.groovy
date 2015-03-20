@@ -1,4 +1,4 @@
-package com.mechzombie.continuum
+package com.mechzombie.continuum.tasks
 
 
 class Task {

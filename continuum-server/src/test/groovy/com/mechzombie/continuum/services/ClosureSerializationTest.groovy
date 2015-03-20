@@ -1,7 +1,6 @@
 package com.mechzombie.continuum.services
 
 import com.google.common.eventbus.EventBus
-import com.mechzombie.continuum.Task
 import com.mechzombie.continuum.TestObjectFactory
 import spock.lang.Specification
 import static org.junit.Assert.assertEquals

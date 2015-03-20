@@ -4,6 +4,15 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    integTest { sourceSet ->
+        ["java", "groovy", "scala", "resources"].each {
+            if (!sourceSet.hasProperty(it)) return
+            sourceSet."$it".srcDir file("src/integTest/${it}")
+        }
+    }
+}
+
 configurations {
     compile.exclude module: 'groovy-all'
     integTest
@@ -12,11 +21,31 @@ configurations {
 dependencies {
     compile (
         localGroovy(),
-        'com.rabbitmq:amqp-client:3.3.5',
+       // 'com.rabbitmq:amqp-client:3.3.5',
     )
 
     testCompile(
+        project(':continuum-server'),
         'org.spockframework:spock-core:0.7-groovy-2.0',
         group: 'junit', name: 'junit', version: '4.11'
     )
+    integTestCompile (
+        sourceSets.main.output,
+        sourceSets.test.output,
+        configurations.testCompile,
+
+
+
+    )
+    integTestRuntime configurations.testRuntime
 }
+
+
+// Define integration test task
+task integTest(type: Test) {
+    dependsOn test
+    testClassesDir = sourceSets.integTest.output.classesDir
+    classpath = sourceSets.integTest.runtimeClasspath
+}
+
+check.dependsOn integTest

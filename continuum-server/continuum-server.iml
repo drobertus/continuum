@@ -27,6 +27,12 @@
         <CLASSES>
           <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/27drb4udbjf4k88eh2ffdc0n55/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/27drb4udbjf4k88eh2ffdc0n55/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/27drb4udbjf4k88eh2ffdc0n55/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/27drb4udbjf4k88eh2ffdc0n55/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/27drb4udbjf4k88eh2ffdc0n55/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/27drb4udbjf4k88eh2ffdc0n55/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/27drb4udbjf4k88eh2ffdc0n55/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/27drb4udbjf4k88eh2ffdc0n55/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -34,47 +40,17 @@
     </orderEntry>
     <orderEntry type="library" scope="TEST" name="Gradle: org.spockframework:spock-core:0.7-groovy-2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit-dep:4.10" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.rabbitmq:amqp-client:3.3.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-core:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-common:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: log4j:log4j:1.2.16" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: commons-cli:commons-cli:1.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-access-control:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-amqp-0-8-protocol:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-amqp-0-10-protocol:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-amqp-1-0-protocol:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-amqp-msg-conv-0-8-to-0-10:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-amqp-msg-conv-0-8-to-1-0:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-amqp-msg-conv-0-10-to-1-0:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-derby-store:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-jdbc-provider-bone:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-jdbc-store:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-management-http:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-management-jmx:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-memory-store:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-broker-plugins-websocket:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-management-common:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.slf4j:slf4j-api:1.6.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.slf4j:slf4j-log4j12:1.6.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: commons-codec:commons-codec:1.9" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: commons-lang:commons-lang:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.codehaus.jackson:jackson-core-asl:1.9.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.codehaus.jackson:jackson-mapper-asl:1.9.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.bcel:bcel:5.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.qpid:qpid-amqp-1-0-common:0.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.derby:derby:10.8.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.jolbox:bonecp:0.7.1.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.geronimo.specs:geronimo-servlet_3.0_spec:1.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.eclipse.jetty:jetty-server:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.eclipse.jetty:jetty-servlet:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.dojotoolkit:dojo:1.9.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.eclipse.jetty:jetty-websocket:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.eclipse.jetty:jetty-continuation:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.eclipse.jetty:jetty-http:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.eclipse.jetty:jetty-security:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.eclipse.jetty:jetty-util:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.eclipse.jetty:jetty-io:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.eclipse.jetty.orbit:javax.servlet:3.0.0.v201112011016" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.eclipse.jetty:jetty-server:8.1.14.v20131031" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.eclipse.jetty:jetty-servlet:8.1.14.v20131031" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.eclipse.jetty.orbit:javax.servlet:3.0.0.v201112011016" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.eclipse.jetty:jetty-continuation:8.1.14.v20131031" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.eclipse.jetty:jetty-http:8.1.14.v20131031" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.eclipse.jetty:jetty-security:8.1.14.v20131031" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.eclipse.jetty:jetty-io:8.1.14.v20131031" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.eclipse.jetty:jetty-util:8.1.14.v20131031" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: javax.ws.rs:jsr311-api:1.1.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.sun.jersey:jersey-server:1.19" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.sun.jersey:jersey-core:1.19" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.sun.jersey:jersey-servlet:1.19" level="project" />
   </component>
 </module>

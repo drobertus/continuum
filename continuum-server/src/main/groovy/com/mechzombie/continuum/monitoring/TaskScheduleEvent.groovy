@@ -1,6 +1,6 @@
 package com.mechzombie.continuum.monitoring
 
-import com.mechzombie.continuum.Task
+import com.mechzombie.continuum.tasks.Task
 
 /**
  * Created by David on 2/9/2015.

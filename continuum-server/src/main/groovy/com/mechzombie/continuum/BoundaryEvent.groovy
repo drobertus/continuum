@@ -1,6 +1,7 @@
 package com.mechzombie.continuum
 
 import com.mechzombie.continuum.glossary.GlossaryEntry
+import com.mechzombie.continuum.tasks.Task
 
 /**
  * Created by David on 2/1/2015.
@@ -21,7 +22,6 @@ class BoundaryEvent {
         this.boundaryName = name
         this.precedingPhase = precedingPhase
         this.succeedingPhase = succeedingPhase
-        //boundaryTask = new Task()
     }
 
     GlossaryEntry getName() {
@@ -32,11 +32,11 @@ class BoundaryEvent {
          return boundaryTask && boundaryTask.isValid()
     }
 
-    def setBoundaryTask(Closure toRun) {
+    void setBoundaryTask(Closure toRun) {
         boundaryTask = new Task(toExecute: toRun)
     }
 
-    def setBoundaryTask(Date runTime, Closure toRun) {
+    void setBoundaryTask(Date runTime, Closure toRun) {
        boundaryTask = new Task(scheduledDate: runTime, toExecute: toRun)
     }
 

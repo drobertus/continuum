@@ -35,9 +35,8 @@
     "name" : "httpManagement"
   }],
   "keystores" : [ {
-     "name" : "default",
-        "password" : "password",
-      "path": "${qpid.home_dir}${file.separator}keystore"
-
-    }]
+    "name" : "default",
+    "password" : "password",
+    "path": "${qpid.home_dir}${file.separator}keystore"
+  }]
 }

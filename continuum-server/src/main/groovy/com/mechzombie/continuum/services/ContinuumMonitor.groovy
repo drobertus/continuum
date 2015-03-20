@@ -1,7 +1,7 @@
 package com.mechzombie.continuum.services
 
 import com.mechzombie.continuum.ContinuumType
-import com.mechzombie.continuum.Task
+import com.mechzombie.continuum.tasks.Task
 
 interface ContinuumMonitor {
 
@@ -45,4 +45,6 @@ interface ContinuumMonitor {
     void registerContinuumType(ContinuumType type)
 
     boolean isMonitoring(String continuumName)
+
+    void submitForExecution(Task task)
 }

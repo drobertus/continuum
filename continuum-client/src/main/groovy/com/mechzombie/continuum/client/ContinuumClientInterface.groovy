@@ -16,6 +16,8 @@ interface ContinuumClientInterface {
 
     def getContinuumTypes()
 
+    def createContinuumType(String typeName)
+
 
 
 }

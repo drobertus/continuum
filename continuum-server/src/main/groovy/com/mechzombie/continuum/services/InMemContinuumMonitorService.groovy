@@ -3,11 +3,12 @@ package com.mechzombie.continuum.services
 import com.google.common.eventbus.EventBus
 import com.mechzombie.continuum.Continuum
 import com.mechzombie.continuum.ContinuumType
-import com.mechzombie.continuum.Task
+import com.mechzombie.continuum.tasks.Task
 import com.mechzombie.continuum.monitoring.MonitorContinuumEvent
 import com.mechzombie.continuum.monitoring.MonitorContinuumSubscriber
 import com.mechzombie.continuum.monitoring.TaskScheduleEvent
 import com.mechzombie.continuum.monitoring.TaskSubscriber
+import groovy.transform.CompileStatic
 import groovy.util.logging.Log
 
 import java.util.concurrent.CopyOnWriteArrayList
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * and marshalls the necessary resources needed to process
  *
  */
+//@CompileStatic
 @Log
 class InMemContinuumMonitorService implements ContinuumMonitor, TaskSubscriber, MonitorContinuumSubscriber {
 
@@ -31,7 +33,7 @@ class InMemContinuumMonitorService implements ContinuumMonitor, TaskSubscriber, 
     private final def listOfTasks = new ConcurrentSkipListMap<Date, Task>()
     private final def newContinuum = new CopyOnWriteArrayList<Continuum>()
     private final def knownContinuum = new CopyOnWriteArrayList<Continuum>()
-    private def monitoring = new AtomicBoolean(true)
+    private AtomicBoolean monitoring = new AtomicBoolean(true)
 
     EventBus eventBus
     private final Thread monitorThread
@@ -91,7 +93,12 @@ class InMemContinuumMonitorService implements ContinuumMonitor, TaskSubscriber, 
         return false
     }
 
-    private def monitor = {
+    @Override
+    void submitForExecution(Task task) {
+        //TODO: thread pool, logging, ceremony, etc.
+        Thread.start task.toExecute
+    }
+    private Closure monitor = {
         while (monitoring.get()) {
 
             if (listOfTasks.size() > 0) {
@@ -103,9 +110,8 @@ class InMemContinuumMonitorService implements ContinuumMonitor, TaskSubscriber, 
                     def toRun = listOfTasks.get(entry)
                     listOfTasks.remove(entry, toRun)
 
-                    //def dehydrated = toRun.toExecute.dehydrate()
+                    submitForExecution(toRun)
 
-                    Thread.start toRun.toExecute
                 }
             }
             if (!newContinuum.empty) {

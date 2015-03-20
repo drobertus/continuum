@@ -1,6 +1,3 @@
-//rootProject.name = 'continuum'
-
 include 'continuum-client', 'continuum-server'
 
-include 'task-runner'
 
