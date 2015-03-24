@@ -1,6 +1,8 @@
 package com.mechzombie.continuum.client
 
-import com.mechzombie.continuum.client.dto.Glossary
+import com.mechzombie.continuum.protocol.Continuum
+import com.mechzombie.continuum.protocol.ContinuumType
+import com.mechzombie.continuum.protocol.Glossary
 
 
 interface ContinuumClientInterface {
@@ -8,15 +10,17 @@ interface ContinuumClientInterface {
 
     def login(String user, String pass)
 
+    ContinuumType createContinuumType(String userId, String typeName)
+
     def getOngoingData(Date startDate, Date endDate)
 
-    def getContinuumDetails(def id)
+    Continuum getContinuum(def id)
 
     Glossary getGlossary(String continuumType)
 
-    def getContinuumTypes()
+    List<String> getContinuumTypes(String userId)
 
-    def createContinuumType(String typeName)
+
 
 
 

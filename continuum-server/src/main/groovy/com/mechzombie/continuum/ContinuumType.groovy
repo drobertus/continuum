@@ -77,7 +77,7 @@ class ContinuumType {
         return glossary.entries[entryName]
     }
 
-    BoundaryEventType createBoundary(String name, PhaseType phase, PhaseBoundary boundary) {
+    BoundaryEventType createBoundary(String name, PhaseType phase, PhaseBoundaryTypeEnum boundary) {
 
         if(!name) {
             throw new Exception ("A Boundary must have a name")
@@ -106,7 +106,7 @@ class ContinuumType {
 
         //TODO- ultimately we will need more logic to determine if the
         //proceeding/succeeding phase is Coincident with the selected phase
-        if (PhaseBoundary.ENTRY.equals( boundary) ){
+        if (PhaseBoundaryTypeEnum.ENTRY.equals( boundary) ){
             coincidentPhase = phases[phasePosition - 1]
             bound = new BoundaryEventType(glossEntry, coincidentPhase, phase)
             phase.entryBoundary = bound

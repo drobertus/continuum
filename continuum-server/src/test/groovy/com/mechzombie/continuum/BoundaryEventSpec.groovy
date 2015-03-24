@@ -27,19 +27,19 @@ class BoundaryEventSpec extends Specification {
             assertEquals afterPhase.previousPhase, beforePhase
 
         when: 'create a boundary on the entry to the first phase'
-            def startBound = twoPhaseCT.createBoundary("start", beforePhase, PhaseBoundary.ENTRY)
+            def startBound = twoPhaseCT.createBoundary("start", beforePhase, PhaseBoundaryTypeEnum.ENTRY)
 
         then: 'the first phase should have an entry boundary'
             assertEquals startBound, beforePhase.entryBoundary
 
         when: 'create a boundary on the exit of the second phase'
-            def endBound = twoPhaseCT.createBoundary("end", afterPhase, PhaseBoundary.EXIT)
+            def endBound = twoPhaseCT.createBoundary("end", afterPhase, PhaseBoundaryTypeEnum.EXIT)
 
         then: 'the last phase should have an exit boundary'
             assertEquals endBound, afterPhase.exitBoundary
 
         when: ' a boundary is defined at the exit of the first phase'
-            def inbetween = twoPhaseCT.createBoundary("middle", beforePhase, PhaseBoundary.EXIT)
+            def inbetween = twoPhaseCT.createBoundary("middle", beforePhase, PhaseBoundaryTypeEnum.EXIT)
 
         then: ' the boundary should  appear at the exit of the first phase '
             assertEquals inbetween, beforePhase.exitBoundary
@@ -62,7 +62,7 @@ class BoundaryEventSpec extends Specification {
 
         when: "an entry boundary is set for the start"
 
-            def agenda = ct.createBoundary('agenda', premeet, PhaseBoundary.EXIT)
+            def agenda = ct.createBoundary('agenda', premeet, PhaseBoundaryTypeEnum.EXIT)
             def boundType = ct.boundaryTypes['agenda']
         then:
             assertNotNull agenda

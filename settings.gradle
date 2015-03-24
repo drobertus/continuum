@@ -1,3 +1,5 @@
 include 'continuum-client', 'continuum-server'
 
 
+include 'continuum-protocol'
+

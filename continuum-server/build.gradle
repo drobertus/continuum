@@ -1,9 +1,6 @@
 apply plugin: 'groovy'
 apply plugin: 'jacoco'
 
-sourceCompatibility = 1.7
-version = '1.0'
-
 repositories {
     mavenCentral()
 }
@@ -26,15 +23,17 @@ dependencies {
 
     compile (
         localGroovy(),
+        project(':continuum-protocol'),
         'javax.ws.rs:jsr311-api:1.1.1',
 //        'com.sun.jersey:jersey-core:1.19',
         'com.sun.jersey:jersey-server:1.19', //17.1',
         'com.sun.jersey:jersey-core:1.19',
         'com.sun.jersey:jersey-servlet:1.19',
-        //'com.sun.jersey:jersey-bundle:1.17.1',
+        'com.sun.jersey.contribs:jersey-guice:1.19',
 
-
-
+        // we've got plenty of weird shit already
+        // so let's try mongo for persistence
+        'org.mongodb:mongo-java-driver:2.12.4',
         'com.google.guava:guava:18.0',
         //'com.rabbitmq:amqp-client:3.3.5',
         'org.eclipse.jetty:jetty-server:8.1.14.v20131031',// 9.2.1.v20140609',
