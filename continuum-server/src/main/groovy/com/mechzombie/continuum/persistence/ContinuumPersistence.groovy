@@ -5,4 +5,5 @@ package com.mechzombie.continuum.persistence
  */
 interface ContinuumPersistence {
 
+    Object findUser(String userName, String password)
 }

@@ -1,6 +1,7 @@
 package com.mechzombie.continuum
 
 import com.mechzombie.continuum.client.ContinuumClient
+import com.mechzombie.continuum.persistence.MongoPersistence
 import com.mechzombie.continuum.protocol.StandardMsg
 import com.mechzombie.continuum.runner.EmbeddedRunner
 import com.mechzombie.continuum.server.ContinuumServer
@@ -65,17 +66,17 @@ class ClientIntegTest extends Specification {
 
         mongoClient = new MongoClient('localhost', 27017)
         //setup user 'bob' in MongoDB
-        mongoDB = mongoClient.getDB(ContinuumServer.dbName)
+        mongoDB = mongoClient.getDB(MongoPersistence.DB_NAME)
         //clear the
 
-        if(!mongoDB.collectionExists(ContinuumServer.userColl)) {
+        if(!mongoDB.collectionExists(MongoPersistence.USER_COLLECTION)) {
             DBObject options = new BasicDBObject("capped", true)
                 .append("size", 500)
-            users = mongoDB.createCollection(ContinuumServer.userColl, options)
+            users = mongoDB.createCollection(MongoPersistence.USER_COLLECTION, options)
            users.createIndex(new BasicDBObject('username', 1))
         }
         else {
-            users = mongoDB.getCollection(ContinuumServer.userColl)
+            users = mongoDB.getCollection(MongoPersistence.USER_COLLECTION)
         }
 
         DBObject userToAdd = new BasicDBObjectBuilder().add('username',userToFind)
