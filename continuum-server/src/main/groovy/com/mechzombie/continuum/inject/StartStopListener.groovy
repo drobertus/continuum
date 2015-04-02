@@ -15,7 +15,7 @@ class StartStopListener extends GuiceServletContextListener {
     @Override
     protected Injector getInjector() {
 
-        return Guice.createInjector(new ContinuumRESTModule(), new ContinuumServerModule())
+        return Guice.createInjector(new ContinuumServerModule(), new ContinuumRESTModule())
 
     }
 

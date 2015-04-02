@@ -48,17 +48,7 @@ class MongoPersistence implements ContinuumPersistence {
 
     @Override
     Object findUser(String userName, String password) {
-//        if(!users) {
-//            getMongoClient()
-//            if (!mongoDB.collectionExists(userColl)) {
-//                DBObject options = new BasicDBObject("capped", true)
-//                    .append("size", 500)
-//                users = mongoDB.createCollection(userColl, options)
-//            }
-//            else {
-//                users = mongoDB.getCollection(userColl)
-//            }
-//        }
+
         println 'user count before quesry= ' +users.count()
         //ReadPreference readPrefs = new ReadPreference
         def userQuery = new BasicDBObjectBuilder().add('username', userName)

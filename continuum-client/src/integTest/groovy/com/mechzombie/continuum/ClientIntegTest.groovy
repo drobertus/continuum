@@ -2,9 +2,10 @@ package com.mechzombie.continuum
 
 import com.mechzombie.continuum.client.ContinuumClient
 import com.mechzombie.continuum.persistence.MongoPersistence
+import com.mechzombie.continuum.protocol.ContinuumTypeMsg
+import com.mechzombie.continuum.protocol.LoginResponse
 import com.mechzombie.continuum.protocol.StandardMsg
 import com.mechzombie.continuum.runner.EmbeddedRunner
-import com.mechzombie.continuum.server.ContinuumServer
 import com.mongodb.BasicDBObject
 import com.mongodb.BasicDBObjectBuilder
 import com.mongodb.DB
@@ -13,8 +14,6 @@ import com.mongodb.DBObject
 import com.mongodb.MongoClient
 import com.mongodb.WriteConcern
 import groovy.json.JsonParser
-import groovy.json.JsonSlurper
-import groovy.json.internal.BaseJsonParser
 import groovy.json.internal.JsonParserCharArray
 import spock.lang.Specification
 
@@ -37,12 +36,12 @@ class ClientIntegTest extends Specification {
 
         def client = new ContinuumClient(rootPath)
         def result = client.login(userToFind, 'pass')
-        JsonParser parser = new JsonParserCharArray()
+        //JsonParser parser = new JsonParserCharArray()
 
-        StandardMsg msg = parser.parse(result.toCharArray())
-        println 'msgType = ' + msg.getMsgType()
+        //StandardMsg msg = parser.parse(result.toCharArray())
+        println 'msgType = ' + result.getMsgBody().getMessageType()
 
-        def sessid = msg.msgBody.sessionId
+        def sessid = result.msgBody.sessionId
         assertNotNull sessid
         println " login = ${result}"
         println "sessionId= ${sessid}"
@@ -53,7 +52,7 @@ class ClientIntegTest extends Specification {
         }
         //TODO: escape spaces and non-REST compliant characters
 
-        com.mechzombie.continuum.protocol.ContinuumType newType = client.createContinuumType('bob', 'meeting') // type')
+        ContinuumTypeMsg newType = client.createContinuumType('bob', 'meeting') // type')
         assertNotNull newType
         assertEquals newType.name, 'meeting'
         //TODO: parse into protocol object

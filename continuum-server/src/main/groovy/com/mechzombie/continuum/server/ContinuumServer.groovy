@@ -33,10 +33,7 @@ class ContinuumServer {
     }
 
     def login(String user, String pass) {
-        
         def id = persistence.findUser(user, pass)
-
-
     }
 
 

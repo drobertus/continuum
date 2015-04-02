@@ -2,13 +2,12 @@ package com.mechzombie.continuum.services
 
 import com.google.common.eventbus.EventBus
 import com.mechzombie.continuum.TestObjectFactory
+import spock.lang.Ignore
 import spock.lang.Specification
 import static org.junit.Assert.assertEquals
 
 
-/**
- * Created by David on 3/1/2015.
- */
+@Ignore
 class ClosureSerializationTest extends Specification {
 
     def "test how well closures serialize and de-serialize"() {

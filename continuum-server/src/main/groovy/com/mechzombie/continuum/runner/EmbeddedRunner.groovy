@@ -3,16 +3,13 @@ package com.mechzombie.continuum.runner
 import com.google.inject.servlet.GuiceFilter
 import com.mechzombie.continuum.inject.StartStopListener
 import com.mechzombie.continuum.server.ContinuumServer
-import com.mechzombie.continuum.services.ContinuumMonitor
-import com.sun.jersey.spi.container.servlet.ServletContainer
+import groovy.util.logging.Log
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHolder
 
-/**
- * Created by David on 3/19/2015.
- */
+@Log
 class EmbeddedRunner implements Runnable {
 
     Server server
@@ -36,15 +33,12 @@ class EmbeddedRunner implements Runnable {
         //TODO get object instantiation under injection
 
         server = new Server(serverPort)
-        println "the rest server should be starting!"
+        log.info "the rest server should be starting!"
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS)
         context.setContextPath('/continuum')
-        ServletHolder sh = new ServletHolder(new DefaultServlet())// new ServletContainer())
+        ServletHolder sh = new ServletHolder(new DefaultServlet())
         context.addEventListener(new StartStopListener())
         context.addFilter(GuiceFilter.class, '/*', null)
-//        sh.setInitParameter('com.sun.jersey.config.property.resourceConfigClass',
-//            'com.sun.jersey.api.core.PackagesResourceConfig')
-//        sh.setInitParameter("com.sun.jersey.config.property.packages","com.mechzombie.continuum.web")
         context.addServlet(sh, '/*')
         server.setHandler(context)
 

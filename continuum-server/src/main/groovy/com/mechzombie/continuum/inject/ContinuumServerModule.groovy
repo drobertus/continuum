@@ -7,18 +7,18 @@ import com.google.inject.Singleton
 import com.google.inject.name.Named
 import com.mechzombie.continuum.persistence.ContinuumPersistence
 import com.mechzombie.continuum.persistence.MongoPersistence
+import com.mechzombie.continuum.protocol.MsgObjectConverter
 import com.mechzombie.continuum.server.ContinuumServer
 import com.mongodb.MongoClient
 
-/**
- * Created by David on 3/23/2015.
- */
+
 class ContinuumServerModule extends AbstractModule {
 
     @Override
     protected void configure() {
         bind(ContinuumServer.class).in(Singleton.class)
         bind(ContinuumPersistence.class).to(MongoPersistence.class).in(Singleton.class)
+        bind(MsgObjectConverter.class).in(Singleton.class)
     }
 
     @Provides

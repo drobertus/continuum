@@ -1,9 +1,7 @@
 package com.mechzombie.continuum.protocol
 
-/**
- * Created by David on 2/23/2015.
- */
-class GlossaryEntry {
+
+class GlossaryEntryMsg implements JsonSerializable {
 
     String name
 
@@ -16,4 +14,8 @@ class GlossaryEntry {
 
     def cognates = []
 
+    @Override
+    String getMessageType() {
+        'GlossaryEntry'
+    }
 }

@@ -21,7 +21,7 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: groovy-all-2.3.6">
         <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/27drb4udbjf4k88eh2ffdc0n55/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/wrapper/dists/gradle-2.1-all/488seql5pimt7vjvdsuqhh1ut/gradle-2.1/lib/groovy-all-2.3.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

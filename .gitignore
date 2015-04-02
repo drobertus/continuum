@@ -1,8 +1,10 @@
 .gradle
 .idea
-continuum.iml
+continuum-client\continuum-client.iml
+continuum-protocol\continuum-protocol.iml
 build/
 *.iml
+
 
 # Ignore Gradle GUI config
 gradle-app.setting

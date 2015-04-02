@@ -1,8 +1,9 @@
 package com.mechzombie.continuum.client
 
-import com.mechzombie.continuum.protocol.Continuum
-import com.mechzombie.continuum.protocol.ContinuumType
-import com.mechzombie.continuum.protocol.Glossary
+import com.mechzombie.continuum.protocol.ContinuumMsg
+import com.mechzombie.continuum.protocol.ContinuumTypeMsg
+import com.mechzombie.continuum.protocol.GlossaryMsg
+import com.mechzombie.continuum.protocol.MsgObjectConverter
 import com.mechzombie.continuum.protocol.StandardMsg
 import groovy.json.JsonParser
 import groovy.json.internal.JsonParserCharArray
@@ -12,19 +13,24 @@ class ContinuumClient implements ContinuumClientInterface {
 
     def sessionId
     def rootPath
+    MsgObjectConverter converter
 
-    JsonParser parser
+
+
+    //JsonParser parser
 
     ContinuumClient(String rootPath) {
         this.rootPath = rootPath
-        parser = new JsonParserCharArray()
+        //parser = new JsonParserCharArray()
+        converter = new MsgObjectConverter()
     }
 
     @Override
     def login(String user, String pass) {
         def result = "${rootPath}/login/${user}/${pass}".toURL().getText()
         println "got result ${result}"
-        return result
+        return converter.getStdMsgFromString(result)
+        //return result
     }
 
 
@@ -35,12 +41,12 @@ class ContinuumClient implements ContinuumClientInterface {
     }
 
     @Override
-    Continuum getContinuum(def Object id) {
+    ContinuumMsg getContinuum(def Object id) {
         return null
     }
 
     @Override
-    Glossary getGlossary(String continuumType) {
+    GlossaryMsg getGlossary(String continuumType) {
         return null
     }
 
@@ -52,16 +58,16 @@ class ContinuumClient implements ContinuumClientInterface {
     }
 
     @Override
-    ContinuumType createContinuumType(String userId, String typeName) {
+    ContinuumTypeMsg createContinuumType(String userId, String typeName) {
         def response =  "${rootPath}/createContinuumType/${userId}/${URLEncoder.encode(typeName)}".toURL().getText()
         //return null;
-        ContinuumType theCT = (ContinuumType)getStdMsg(response).msgBody
+        ContinuumTypeMsg theCT = (ContinuumTypeMsg)getStdMsg(response).msgBody
         return theCT
     }
 
     private StandardMsg getStdMsg (String response) {
 
-        StandardMsg  stdMsg = parser.parse(response)
+        StandardMsg  stdMsg = converter.getStdMsgFromString(response)
         return stdMsg
     }
 }

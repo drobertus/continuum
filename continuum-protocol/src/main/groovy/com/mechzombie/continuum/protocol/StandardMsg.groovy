@@ -1,12 +1,18 @@
 package com.mechzombie.continuum.protocol
 
-/**
- * Created by David on 3/23/2015.
- */
+import groovy.json.JsonBuilder
+
+
 class StandardMsg {
 
-    String msgType
+    static def messageCategory = 'StandardMsg'
 
     def msgBody
+
+    String toJSON(JsonBuilder builder = new JsonBuilder()) {
+        builder.setContent(this)
+        return builder.toString()
+    }
+
 
 }

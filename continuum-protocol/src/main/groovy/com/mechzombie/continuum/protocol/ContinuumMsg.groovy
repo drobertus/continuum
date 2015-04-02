@@ -1,6 +1,6 @@
 package com.mechzombie.continuum.protocol
 
-class Continuum {
+class ContinuumMsg implements JsonSerializable {
 
     // the name fo the continuum exists as a glossary entry
     String name
@@ -11,10 +11,15 @@ class Continuum {
      * a child type is a category of continuum that can exist in
      * the current continuum
      */
-    Map<String, ContinuumType> childTypes = [:]
+    Map<String, ContinuumTypeMsg> childTypes = [:]
     // children are grouped by unique type and then specific name
-    Map<ContinuumType, Map<String, Continuum>> children = [:]
+    Map<ContinuumTypeMsg, Map<String, ContinuumMsg>> children = [:]
 
-    List<Phase> phases = []
-    Map<String, Boundary> boundaries = [:]
+    List<PhaseMsg> phases = []
+    Map<String, BoundaryMsg> boundaries = [:]
+
+    @Override
+    String getMessageType() {
+        'Continuum'
+    }
 }
