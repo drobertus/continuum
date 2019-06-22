@@ -64,7 +64,7 @@ jacoco {
 // Define integration test task
 task integTest(type: Test) {
     dependsOn test
-    testClassesDir = sourceSets.integTest.output.classesDir
+    testClassesDirs = sourceSets.integTest.output.classesDirs 
     classpath = sourceSets.integTest.runtimeClasspath
 }
 
