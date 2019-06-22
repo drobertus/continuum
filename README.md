@@ -1,6 +1,6 @@
 # continuum
 
-Access and strucute for events passing through time. 
+Access and structure for events passing through time.
 Think of a time-factored business concept (I originally designed this with a meeting in mind).  An event consistes of phases (or stages, statuses, if you like).
 These can be defined in advance, like a meeting that has an open ended pre-meeting and post-meeting time phase, and a distinct closed meeting time.
 
@@ -9,7 +9,7 @@ For example, the end of a meeting might trigger the posting of meeting notes, of
 
 Project Status:
 
-Event Types are defined, the basic mecahnis appear to be in place.  Their use as an ongoing utility is not impleemnted (yet).  
+Event Types are defined, the basic mechanisms appear to be in place.  Their use as an ongoing utility is not implemented (yet).
 The object model is complete,as are the triggering activities.  
 
 Needs: 

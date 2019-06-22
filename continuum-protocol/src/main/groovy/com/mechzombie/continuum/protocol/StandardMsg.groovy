@@ -1,7 +1,7 @@
 package com.mechzombie.continuum.protocol
 
 import groovy.json.JsonBuilder
-
+import groovy.json.JsonOutput
 
 class StandardMsg {
 
@@ -10,9 +10,7 @@ class StandardMsg {
     def msgBody
 
     String toJSON(JsonBuilder builder = new JsonBuilder()) {
-        builder.setContent(this)
-        return builder.toString()
+        return JsonOutput.toJson(this)
     }
-
 
 }
